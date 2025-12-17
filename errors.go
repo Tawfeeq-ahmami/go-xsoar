@@ -153,7 +153,15 @@ func parseError(statusCode int, body []byte, headers http.Header) error {
 	case statusCode == http.StatusNotFound:
 		return &NotFoundError{APIError: base}
 	case statusCode == http.StatusBadRequest:
-		return &ValidationError{APIError: base}
+		validationErr := &ValidationError{APIError: base}
+		// Best-effort parse of field-level validation errors
+		var fieldData struct {
+			Fields map[string]string `json:"fields"`
+		}
+		if json.Unmarshal(body, &fieldData) == nil && len(fieldData.Fields) > 0 {
+			validationErr.Fields = fieldData.Fields
+		}
+		return validationErr
 	case statusCode == http.StatusTooManyRequests:
 		return &RateLimitError{
 			APIError:   base,

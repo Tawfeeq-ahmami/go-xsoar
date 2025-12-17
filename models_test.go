@@ -46,6 +46,11 @@ func TestSeverity(t *testing.T) {
 		// Should not panic on nil pointer
 		assert.Equal(t, "Unknown", s.String())
 	})
+
+	t.Run("unknown severity value returns Unknown", func(t *testing.T) {
+		s := xsoar.Severity(99)
+		assert.Equal(t, "Unknown", s.String())
+	})
 }
 
 func TestIncidentStatus(t *testing.T) {

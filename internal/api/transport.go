@@ -136,7 +136,9 @@ func (t *Transport) buildRequest(ctx context.Context, req *Request) (*http.Reque
 	}
 
 	// Set default headers
-	httpReq.Header.Set("Content-Type", "application/json")
+	if req.Body != nil {
+		httpReq.Header.Set("Content-Type", "application/json")
+	}
 	httpReq.Header.Set("Accept", "application/json")
 	httpReq.Header.Set("User-Agent", t.UserAgent)
 

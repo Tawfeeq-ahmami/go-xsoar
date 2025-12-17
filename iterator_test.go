@@ -133,6 +133,15 @@ func TestTake(t *testing.T) {
 		require.NoError(t, err)
 		assert.Equal(t, []int{1, 2}, result)
 	})
+
+	t.Run("propagates errors", func(t *testing.T) {
+		testErr := errors.New("test error")
+		seq := makeSeqWithError([]int{1, 2, 3, 4, 5}, 2, testErr)
+		taken := xsoar.Take(seq, 5)
+
+		_, err := xsoar.Collect(taken)
+		require.ErrorIs(t, err, testErr)
+	})
 }
 
 func TestFilter(t *testing.T) {

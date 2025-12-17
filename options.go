@@ -40,6 +40,8 @@ func WithHTTPClient(client *http.Client) ClientOption {
 }
 
 // WithTimeout sets the default request timeout.
+// Note: This option is ignored when WithHTTPClient is used;
+// set the timeout directly on the provided client instead.
 func WithTimeout(d time.Duration) ClientOption {
 	return func(c *clientConfig) {
 		c.timeout = d

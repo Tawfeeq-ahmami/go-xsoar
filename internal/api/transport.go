@@ -31,6 +31,10 @@ type Transport struct {
 
 // NewTransport creates a Transport with the given configuration.
 func NewTransport(baseURL string, creds *auth.Credentials, httpClient *http.Client) (*Transport, error) {
+	if creds == nil {
+		return nil, fmt.Errorf("credentials must be provided")
+	}
+
 	u, err := url.Parse(strings.TrimSuffix(baseURL, "/"))
 	if err != nil {
 		return nil, fmt.Errorf("invalid base URL: %w", err)

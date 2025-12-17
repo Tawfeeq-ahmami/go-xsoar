@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -133,7 +134,8 @@ func (e *ServerError) As(target any) bool {
 }
 
 // parseError converts an HTTP response into the appropriate error type.
-func parseError(statusCode int, body []byte, requestID string) error {
+func parseError(statusCode int, body []byte, headers http.Header) error {
+	requestID := headers.Get("X-Request-ID")
 	base := APIError{
 		StatusCode: statusCode,
 		RequestID:  requestID,
@@ -153,10 +155,36 @@ func parseError(statusCode int, body []byte, requestID string) error {
 	case statusCode == http.StatusBadRequest:
 		return &ValidationError{APIError: base}
 	case statusCode == http.StatusTooManyRequests:
-		return &RateLimitError{APIError: base}
+		return &RateLimitError{
+			APIError:   base,
+			RetryAfter: parseRetryAfter(headers.Get("Retry-After")),
+		}
 	case statusCode >= http.StatusInternalServerError:
 		return &ServerError{APIError: base}
 	default:
 		return &base
 	}
+}
+
+// parseRetryAfter parses the Retry-After header value.
+// It handles both seconds (integer) and HTTP-date formats.
+func parseRetryAfter(value string) time.Duration {
+	if value == "" {
+		return 0
+	}
+
+	// Try parsing as seconds first
+	if seconds, err := strconv.ParseInt(value, 10, 64); err == nil {
+		return time.Duration(seconds) * time.Second
+	}
+
+	// Try parsing as HTTP-date (RFC 1123)
+	if t, err := time.Parse(time.RFC1123, value); err == nil {
+		duration := time.Until(t)
+		if duration > 0 {
+			return duration
+		}
+	}
+
+	return 0
 }

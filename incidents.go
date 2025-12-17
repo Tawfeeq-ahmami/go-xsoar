@@ -130,7 +130,7 @@ func (s *incidentService) SearchPage(ctx context.Context, filter *IncidentFilter
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
-		return nil, parseError(resp.StatusCode, resp.Body, resp.Headers.Get("X-Request-ID"))
+		return nil, parseError(resp.StatusCode, resp.Body, resp.Headers)
 	}
 
 	return &result, nil
@@ -195,7 +195,7 @@ func (s *incidentService) Get(ctx context.Context, id string, opts ...RequestOpt
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
-		return nil, parseError(resp.StatusCode, resp.Body, resp.Headers.Get("X-Request-ID"))
+		return nil, parseError(resp.StatusCode, resp.Body, resp.Headers)
 	}
 
 	return &result, nil
@@ -223,7 +223,7 @@ func (s *incidentService) Create(ctx context.Context, req *CreateIncidentRequest
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
-		return nil, parseError(resp.StatusCode, resp.Body, resp.Headers.Get("X-Request-ID"))
+		return nil, parseError(resp.StatusCode, resp.Body, resp.Headers)
 	}
 
 	return &result, nil
@@ -255,7 +255,7 @@ func (s *incidentService) Update(ctx context.Context, id string, req *UpdateInci
 		body["description"] = *req.Description
 	}
 	if req.CustomFields != nil {
-		body["customFields"] = req.CustomFields
+		body["CustomFields"] = req.CustomFields
 	}
 
 	resp, err := s.transport.DoJSON(ctx, &api.Request{
@@ -278,7 +278,7 @@ func (s *incidentService) Update(ctx context.Context, id string, req *UpdateInci
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
-		return parseError(resp.StatusCode, resp.Body, resp.Headers.Get("X-Request-ID"))
+		return parseError(resp.StatusCode, resp.Body, resp.Headers)
 	}
 
 	return nil
@@ -322,7 +322,7 @@ func (s *incidentService) Close(ctx context.Context, id string, req *CloseIncide
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
-		return parseError(resp.StatusCode, resp.Body, resp.Headers.Get("X-Request-ID"))
+		return parseError(resp.StatusCode, resp.Body, resp.Headers)
 	}
 
 	return nil
@@ -348,8 +348,16 @@ func (s *incidentService) Delete(ctx context.Context, id string, opts ...Request
 		return err
 	}
 
+	if resp.StatusCode == http.StatusNotFound {
+		return &NotFoundError{
+			APIError:     APIError{StatusCode: http.StatusNotFound, Message: "incident not found"},
+			ResourceType: "incident",
+			ResourceID:   id,
+		}
+	}
+
 	if resp.StatusCode >= http.StatusBadRequest {
-		return parseError(resp.StatusCode, resp.Body, resp.Headers.Get("X-Request-ID"))
+		return parseError(resp.StatusCode, resp.Body, resp.Headers)
 	}
 
 	return nil

